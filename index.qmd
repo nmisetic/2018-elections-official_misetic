@@ -4,7 +4,7 @@ format: html
 editor: visual
 ---
 
-## Montana Map Test
+# Montana Map Test
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -29,6 +29,33 @@ options(tigris_class = "sf")
 myapikey <- "7ec164ce2e6d7eff05a3da72fa85dec41773e398"
 census_api_key(myapikey, overwrite = TRUE)
 ```
+
+## Census Data
+
+```{r, include=FALSE}
+montana_income <- get_acs(
+  geography = 'tract',
+  variables = c( 
+    median_income = 'B06011_001'
+  ),
+  state = 'MT',
+  output = "wide",
+  geometry = TRUE
+)
+```
+
+```{r, include=FALSE}
+montana_income <- montana_income %>%
+  select(-ends_with("M"))
+
+colnames(montana_income) <- sub("E$", "", colnames(montana_income))
+```
+
+```{r}
+
+```
+
+## Harvard Data
 
 ```{r}
 # Define the path to the ZIP file
