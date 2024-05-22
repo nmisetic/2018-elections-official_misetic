@@ -52,7 +52,7 @@ colnames(montana_income) <- sub("E$", "", colnames(montana_income))
 ```
 
 ```{r}
-
+mapview(montana_income, zcol = "median_income")
 ```
 
 ## Harvard Data
