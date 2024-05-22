@@ -58,25 +58,13 @@ mapview(montana_income, zcol = "median_income")
 ## Harvard Data
 
 ```{r}
-# Define the path to the ZIP file
-zip_file_path <- "/mnt/data/X2018_mt_precinct_general.zip"
-unzip_dir <- tempdir()  # Temporary directory to extract the files
+# Read the data file
 
-# Unzip the file and list the contents
-unzip(zip_file_path, exdir = unzip_dir)
-files_in_zip <- list.files(unzip_dir)
-print(files_in_zip)  # Print the files to verify contents
+Montana <- read.csv('MT_precinct_data.csv', header=TRUE, stringsAsFactors=FALSE)
 
-# Identify the shapefile
-shapefile_path <- list.files(unzip_dir, pattern = "\\.shp$", full.names = TRUE)
+```
 
-if (length(shapefile_path) == 0) {
-  stop("No shapefile found in the ZIP archive.")
-}
-
-# Read the shapefile
-data_sf <- st_read(shapefile_path[1])
-
+```{r}
 # Plot the map using ggplot2
 ggplot() +
   geom_sf(data = data_sf, fill = "lightblue", color = "darkblue") +
