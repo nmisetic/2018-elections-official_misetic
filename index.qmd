@@ -12,6 +12,8 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(tigris)
 library(sf)
+library(ggplot2)
+library(dplyr)
 library(tidycensus)
 library(htmltools)
 library(janitor)
@@ -29,5 +31,29 @@ census_api_key(myapikey, overwrite = TRUE)
 ```
 
 ```{r}
-mapview(X2018_mt_precinct_general, zcol = "party_detailed")
+# Define the path to the ZIP file
+zip_file_path <- "/mnt/data/X2018_mt_precinct_general.zip"
+unzip_dir <- tempdir()  # Temporary directory to extract the files
+
+# Unzip the file and list the contents
+unzip(zip_file_path, exdir = unzip_dir)
+files_in_zip <- list.files(unzip_dir)
+print(files_in_zip)  # Print the files to verify contents
+
+# Identify the shapefile
+shapefile_path <- list.files(unzip_dir, pattern = "\\.shp$", full.names = TRUE)
+
+if (length(shapefile_path) == 0) {
+  stop("No shapefile found in the ZIP archive.")
+}
+
+# Read the shapefile
+data_sf <- st_read(shapefile_path[1])
+
+# Plot the map using ggplot2
+ggplot() +
+  geom_sf(data = data_sf, fill = "lightblue", color = "darkblue") +
+  theme_minimal() +
+  labs(title = "Montana Precincts - 2018 General",
+       x = "Longitude", y = "Latitude")
 ```
